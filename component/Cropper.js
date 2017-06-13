@@ -284,7 +284,7 @@ const Cropper = React.createClass({
         this.calcPosition(frameWidth, frameHeight, _x, _y, true);
     },
 
-    handleDragStart(e){
+    handleDragStart(e) {
         const {allowNewSelection} = this.state;
         const action = e.target.getAttribute('data-action') ? e.target.getAttribute('data-action') : e.target.parentNode.getAttribute('data-action');
         const pageX = e.pageX ? e.pageX : e.targetTouches[0].pageX;
@@ -466,19 +466,20 @@ const Cropper = React.createClass({
         </div>;
 
         let node = null;
+        let disabledCursor = disabled ? {cursor: 'initial'} : {};
 
-        if (disabled) {
-            node = <div ref='container' style={deepExtend({}, this.state.styles.container, {
-                'position': 'relative',
-                'height': img_height
-            })}>
-                {imageNode}
-                <div style={deepExtend({}, this.state.styles.modal, this.state.styles.modal_disabled)}></div>
-            </div>;
-        }
-        else {
+        //if (disabled) {
+        //     node = <div ref='container' style={deepExtend({}, this.state.styles.container, {
+        //         'position': 'relative',
+        //         'height': img_height
+        //     })}>
+        //         {imageNode}
+        //         <div style={deepExtend({}, this.state.styles.modal, this.state.styles.modal_disabled)}></div>
+        //     </div>;
+        //}
+        //else {
             node = <div ref="container"
-                        onMouseDown={this.handleDragStart} onTouchStart={this.handleDragStart}
+                        onMouseDown={disabled ? undefined : this.handleDragStart} onTouchStart={disabled ? undefined : this.handleDragStart}
                         style={deepExtend({}, this.state.styles.container, {
                             'position': 'relative',
                             'height': img_height
@@ -486,7 +487,7 @@ const Cropper = React.createClass({
                 {imageNode}
                 {imgBeforeLoaded ?
                     <div>
-                        <div style={this.state.styles.modal}></div>
+                        <div style={this.state.styles.modal}/>
                         <div style={
                             deepExtend(
                                 {},
@@ -517,69 +518,46 @@ const Cropper = React.createClass({
                                     height={img_height}
                                 />
                             </div>
-                            <span style={this.state.styles.move} data-action='move'></span>
-                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotCenter)}
-                                  data-action='move'>
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerCenterVertical)}></span>
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerCenterHorizontal)}></span>
-                           </span>
-                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotNE)}
-                                  data-action="ne">
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerNE)}></span>
-                           </span>
-                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotN)}
-                                  data-action="n">
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerN)}></span>
-                           </span>
-                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotNW)}
-                                  data-action="nw">
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerNW)}></span>
-                           </span>
-                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotE)}
-                                  data-action="e">
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerE)}></span>
-                           </span>
-                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotW)}
-                                  data-action="w">
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerW)}></span>
-                           </span>
-                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotSE)}
-                                  data-action="se">
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerSE)}></span>
-                           </span>
-                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotS)}
-                                  data-action="s">
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerS)}></span>
-                           </span>
-                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotSW)}
-                                  data-action="sw">
-                               <span
-                                   style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerSW)}></span>
-                           </span>
-                            <span style={deepExtend({}, this.state.styles.line, this.state.styles.lineN)}
-                                  data-action="n"></span>
-                            <span style={deepExtend({}, this.state.styles.line, this.state.styles.lineS)}
-                                  data-action="s"></span>
-                            <span style={deepExtend({}, this.state.styles.line, this.state.styles.lineW)}
-                                  data-action="w"></span>
-                            <span style={deepExtend({}, this.state.styles.line, this.state.styles.lineE)}
-                                  data-action="e"></span>
+                            <span style={deepExtend({}, this.state.styles.move, disabledCursor)} data-action='move'/>
+                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotCenter, disabledCursor)} data-action='move'>
+                               <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerCenterVertical)}/>
+                               <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerCenterHorizontal)}/>
+                            </span>
+                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotNE)} data-action="ne">
+                                <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerNE, disabledCursor)}/>
+                            </span>
+                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotN)} data-action="n">
+                                <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerN, disabledCursor)}/>
+                            </span>
+                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotNW)} data-action="nw">
+                                <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerNW, disabledCursor)}/>
+                            </span>
+                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotE)} data-action="e">
+                                <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerE, disabledCursor)}/>
+                            </span>
+                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotW)} data-action="w">
+                                <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerW, disabledCursor)}/>
+                            </span>
+                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotSE)} data-action="se">
+                                <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerSE, disabledCursor)}/>
+                            </span>
+                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotS)} data-action="s">
+                                <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerS, disabledCursor)}/>
+                            </span>
+                            <span style={deepExtend({}, this.state.styles.dot, this.state.styles.dotSW)} data-action="sw">
+                                <span style={deepExtend({}, this.state.styles.dotInner, this.state.styles.dotInnerSW, disabledCursor)}/>
+                            </span>
+                            <span style={deepExtend({}, this.state.styles.line, this.state.styles.lineN, disabledCursor)} data-action="n"/>
+                            <span style={deepExtend({}, this.state.styles.line, this.state.styles.lineS, disabledCursor)} data-action="s"/>
+                            <span style={deepExtend({}, this.state.styles.line, this.state.styles.lineW, disabledCursor)} data-action="w"/>
+                            <span style={deepExtend({}, this.state.styles.line, this.state.styles.lineE, disabledCursor)} data-action="e"/>
                         </div>
                     </div>
                     :
                     null
                 }
             </div>;
-        }
+        //}
 
 
         return (
