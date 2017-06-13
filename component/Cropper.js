@@ -71,7 +71,7 @@ const Cropper = React.createClass({
     },
 
     initStyles(){
-        const container = ReactDOM.findDOMNode(this.refs.container)
+        const container = ReactDOM.findDOMNode(this.refs.container);
         this.setState({
             img_width: container.offsetWidth
         }, () => {
@@ -643,9 +643,7 @@ var defaultStyles = {
         backgroundColor: '#222'
     },
     modal_disabled: {
-        backgroundColor: '#666',
-        opacity: .7,
-        cursor: 'not-allowed'
+        opacity: 0
     },
     move: {
         position: 'absolute',

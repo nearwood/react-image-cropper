@@ -39,6 +39,7 @@ Custom:
 | prop  |  value   |
 |:-------:|:--------|
 | rate | width / height |
+| disabled | boolean |
 | width | cropper frame width |
 | height | cropper frame height |
 | originX | cropper original position(x axis)|
