@@ -76,8 +76,9 @@ const Cropper = React.createClass({
             img_width: container.offsetWidth
         }, () => {
             // calc frame width height
-            let {originX, originY, frameWidth, frameHeight} = this.props;
+            let {originX, originY} = this.props;
             const {img_width, img_height, selectionNatural} = this.state;
+            let {frameWidth, frameHeight} = this.state;
 
             if (selectionNatural) {
                 let img = ReactDOM.findDOMNode(this.refs.img);
@@ -96,7 +97,6 @@ const Cropper = React.createClass({
                 this.setState({frameWidth: frameWidth, frameHeight: frameHeight, originX: originX, originY: originY});
             }
 
-
             const maxLeft = img_width - frameWidth;
             const maxTop = img_height - frameHeight;
 
@@ -112,7 +112,6 @@ const Cropper = React.createClass({
             this.setState({maxLeft, maxTop});
             // calc clone position
             this.calcPosition(frameWidth, frameHeight, originX, originY);
-
         });
     },
 
@@ -156,7 +155,6 @@ const Cropper = React.createClass({
                 }
             }
         }
-
 
         if (width + left > img_width) {
             if (fixedRatio) {
