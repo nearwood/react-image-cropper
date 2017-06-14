@@ -76,11 +76,8 @@ const Cropper = React.createClass({
             img_width: container.offsetWidth
         }, () => {
             // calc frame width height
-            let {originX, originY, disabled} = this.props;
-            if (disabled) return;
+            let {originX, originY, frameWidth, frameHeight} = this.props;
             const {img_width, img_height, selectionNatural} = this.state;
-            let {frameWidth, frameHeight} = this.state;
-
 
             if (selectionNatural) {
                 let img = ReactDOM.findDOMNode(this.refs.img);
@@ -469,16 +466,15 @@ const Cropper = React.createClass({
 
         return (
             <div ref="container"
-                    onMouseDown={disabled ? undefined : this.handleDragStart} onTouchStart={disabled ? undefined : this.handleDragStart}
-                    style={deepExtend({}, this.state.styles.container, {position: 'relative', height: img_height})}>
+                 onMouseDown={disabled ? undefined : this.handleDragStart}
+                 onTouchStart={disabled ? undefined : this.handleDragStart}
+                 style={deepExtend({}, this.state.styles.container, {position: 'relative', height: img_height})}>
             {imageNode}
             {imgBeforeLoaded ?
                 <div>
                     <div style={this.state.styles.modal}/>
                     <div style={
-                        deepExtend(
-                            {},
-                            this.state.styles.frame,
+                        deepExtend({}, this.state.styles.frame,
                             dragging ? this.state.styles.dragging_frame : {},
                             {
                                 display: 'block',
@@ -489,20 +485,8 @@ const Cropper = React.createClass({
                             }
                         )} ref="frameNode">
                         <div style={this.state.styles.clone}>
-                            <img
-                                crossOrigin="anonymous"
-                                src={src}
-                                style={deepExtend(
-                                    {},
-                                    this.state.styles.img,
-                                    {
-                                        marginLeft: -this.state.imgLeft,
-                                        marginTop: -this.state.imgTop
-                                    }
-                                )}
-                                ref="cloneImg"
-                                width={img_width}
-                                height={img_height}
+                            <img ref="cloneImg" width={img_width} height={img_height} crossOrigin="anonymous" src={src}
+                                style={deepExtend({}, this.state.styles.img, {marginLeft: -this.state.imgLeft, marginTop: -this.state.imgTop})}
                             />
                         </div>
                         <span style={deepExtend({}, this.state.styles.move, disabled ? {cursor: 'initial'} : {})} data-action='move'/>
