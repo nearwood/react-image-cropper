@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jerryshew/react-image-cropper"
+    "url": "https://github.com/nearwood/react-image-cropper"
   },
   "keywords": [
     "react",
@@ -22,7 +22,7 @@
   ],
   "author": "jerryshew",
   "license": "MIT",
-  "homepage": "https://github.com",
+  "homepage": "https://github.com/jerryshew",
   "dependencies": {
     "deep-extend": "^0.4.1",
     "react": "^15.0.2",
