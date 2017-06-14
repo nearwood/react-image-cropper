@@ -24,8 +24,8 @@ export default class Cropper extends React.Component {
         this.state = {
             img_width: '100%',
             img_height: 'auto',
-            imgWidth: 200,
-            imgheight: 200,
+            imgWidth: defaultWidth,
+            imgheight: defaultHeight,
             imgTop: 0,
             imgLeft: 0,
             originX: originX == undefined ? 0 : originX,
