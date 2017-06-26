@@ -324,9 +324,7 @@ const Cropper = React.createClass({
                 maxLeft: img_width - offsetWidth,
                 maxTop: img_height - offsetHeight,
                 action: null
-            });
-
-            onDragStop(this.values());
+            }, onDragStop.bind(this.values()));
         }
     },
 
