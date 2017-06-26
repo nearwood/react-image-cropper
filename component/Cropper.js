@@ -16,7 +16,8 @@ const Cropper = React.createClass({
         disabled: React.PropTypes.bool,
         styles: React.PropTypes.object,
         imageLoaded: React.PropTypes.function,
-        beforeImageLoaded: React.PropTypes.function
+        beforeImageLoaded: React.PropTypes.function,
+        onDragStop: React.PropTypes.function
     },
     getDefaultProps() {
         return {
@@ -29,14 +30,13 @@ const Cropper = React.createClass({
             originX: 0,
             originY: 0,
             styles: {},
-            imageLoaded: function () {
-            },
-            beforeImageLoaded: function () {
-            }
+            imageLoaded: function () {},
+            beforeImageLoaded: function () {},
+            onDragStop: function() {}
         };
     },
     getInitialState() {
-        let {originX, originY, width, height, selectionNatural, fixedRatio, allowNewSelection, rate, styles, imageLoaded, beforeImageLoaded} = this.props;
+        let {originX, originY, width, height, selectionNatural, fixedRatio, allowNewSelection, rate, styles, imageLoaded, beforeImageLoaded, onDragStop} = this.props;
         return {
             img_width: '100%',
             img_height: 'auto',
@@ -62,6 +62,7 @@ const Cropper = React.createClass({
             styles: deepExtend({}, defaultStyles, styles),
             imageLoaded,
             beforeImageLoaded,
+            onDragStop,
             moved: false,
             originalOriginX: originX,
             originalOriginY: originY,
@@ -256,8 +257,8 @@ const Cropper = React.createClass({
         if (this.state.dragging) {
             e.preventDefault();
             let {action} = this.state;
-            if (!action) return this.createNewFrame(e)
-            if (action == 'move') return this.frameMove(e)
+            if (!action) return this.createNewFrame(e);
+            if (action == 'move') return this.frameMove(e);
             this.frameDotMove(action, e)
         }
     },
@@ -311,9 +312,9 @@ const Cropper = React.createClass({
     handleDragStop(e){
         if (this.state.dragging) {
             e.preventDefault();
-            const frameNode = ReactDOM.findDOMNode(this.refs.frameNode)
+            const frameNode = ReactDOM.findDOMNode(this.refs.frameNode);
             const {offsetLeft, offsetTop, offsetWidth, offsetHeight} = frameNode;
-            const {img_width, img_height} = this.state;
+            const {img_width, img_height, onDragStop} = this.state;
             this.setState({
                 originX: offsetLeft,
                 originY: offsetTop,
@@ -324,6 +325,8 @@ const Cropper = React.createClass({
                 maxTop: img_height - offsetHeight,
                 action: null
             });
+
+            onDragStop(this.values());
         }
     },
 
@@ -436,13 +439,11 @@ const Cropper = React.createClass({
             const realX = parseInt(thisOriginX * _rateHeight);
             const realY = parseInt(thisOriginY * _rateWidth);
             _return = {width: realWidth, height: realHeight, x: realX, y: realY};
-        }
-        else {
+        } else {
             _return = {width: thisFrameWidth, height: thisFrameHeight, x: thisOriginX, y: thisOriginY};
         }
 
         return _return;
-
     },
 
     render() {
