@@ -33,6 +33,10 @@ const ImageCropDemo = React.createClass({
         });
     },
 
+    OnImageLoadError(e) {
+        console.error(e);
+    },
+
     OnClick(state){
         let node = this.refs[state];
         this.setState({
@@ -80,6 +84,10 @@ const ImageCropDemo = React.createClass({
                 <li>
                     <h3>Disabled</h3>
                     <Cropper src={src} ref="image3" disabled={true}/>
+                </li>
+                <li>
+                    <h3>Missing source</h3>
+                    <Cropper src={'404.jpg'} ref="image5" imageLoadError={this.OnImageLoadError}/>
                 </li>
                 <li>
                     <h3>Variable width and height, cropper frame is relative to natural image size, don't allow new

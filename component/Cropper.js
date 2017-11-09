@@ -17,6 +17,7 @@ const Cropper = React.createClass({
         styles: React.PropTypes.object,
         imageLoaded: React.PropTypes.function,
         beforeImageLoaded: React.PropTypes.function,
+        imageLoadError: React.PropTypes.function,
         onDragStop: React.PropTypes.function
     },
     getDefaultProps() {
@@ -32,11 +33,12 @@ const Cropper = React.createClass({
             styles: {},
             imageLoaded: function () {},
             beforeImageLoaded: function () {},
+            imageLoadError: function () {},
             onDragStop: function() {}
         };
     },
     getInitialState() {
-        let {originX, originY, width, height, selectionNatural, fixedRatio, allowNewSelection, rate, styles, imageLoaded, beforeImageLoaded, onDragStop} = this.props;
+        let {originX, originY, width, height, selectionNatural, fixedRatio, allowNewSelection, rate, styles, imageLoaded, beforeImageLoaded, imageLoadError, onDragStop} = this.props;
         return {
             img_width: '100%',
             img_height: 'auto',
@@ -62,6 +64,7 @@ const Cropper = React.createClass({
             styles: deepExtend({}, defaultStyles, styles),
             imageLoaded,
             beforeImageLoaded,
+            imageLoadError,
             onDragStop,
             moved: false,
             originalOriginX: originX,
@@ -202,6 +205,12 @@ const Cropper = React.createClass({
         const {imageLoaded} = this.state;
         this.setState({imgLoaded: true});
         imageLoaded();
+    },
+
+    imgOnError(proxy, error) {
+        const {imageLoadError} = this.state;
+        this.setState({imgLoaded: false});
+        imageLoadError({error: "Error loading image"});
     },
 
     imgGetSizeBeforeLoad(){
@@ -457,6 +466,7 @@ const Cropper = React.createClass({
                 style={deepExtend({}, this.state.styles.img, this.state.styles.source_img)}
                 ref='img'
                 onLoad={this.imgOnLoad}
+                onError={this.imgOnError}
                 width={img_width} height={img_height}
             />
         </div>;
