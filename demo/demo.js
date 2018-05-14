@@ -95,12 +95,13 @@ const ImageCropDemo = React.createClass({
                     <div style={styles.image4}>
                         <Cropper src={src}
                                  imgWidthMax={300}
-                                 imgHeightMax={200}
-                                 width={320}
-                                 height={240}
+                                 imgHeightMax={100}
+                                 width={200}
+                                 height={400}
                                  originX={650}
                                  originY={386}
-                                 fixedRatio={false}
+                                 fixedRatio={true}
+                                 rate={50 / 100}
                                  selectionNatural={true}
                                  allowNewSelection={false}
                                  styles={{
@@ -144,7 +145,7 @@ const ImageCropDemo = React.createClass({
 const styles = {
     image4: {
         maxWidth: 300,
-        maxHeight: 200
+        maxHeight: 100
     }
 };
 
