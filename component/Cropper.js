@@ -90,8 +90,8 @@ const Cropper = React.createClass({
                 const _rateHeight = img_height / img.naturalHeight;
                 const realWidth = parseInt(frameWidth * _rateWidth);
                 const realHeight = parseInt(frameHeight * _rateHeight);
-                const realX = parseInt(originX * _rateHeight);
-                const realY = parseInt(originY * _rateWidth);
+                const realX = parseInt(originX * _rateWidth);
+                const realY = parseInt(originY * _rateHeight);
 
                 frameWidth = realWidth;
                 frameHeight = realHeight;
@@ -220,22 +220,32 @@ const Cropper = React.createClass({
             if (img && img.naturalWidth) {
                 const {beforeImageLoaded} = that.state;
 
-                var heightRatio = img.offsetWidth / img.naturalWidth;
-                var height = parseInt(img.naturalHeight * heightRatio);
+                let heightRatio = img.offsetHeight / img.naturalHeight;
+                let widthRatio = img.offsetWidth / img.naturalWidth;
+                let height = parseInt(img.naturalHeight * heightRatio);
+                let width = parseInt(img.naturalWidth * widthRatio);
+
+                let {imgWidthMax, imgHeightMax} = that.props;
+
+                if (height > imgHeightMax) {
+                    height = imgHeightMax;
+                }
+
+                if (width > imgWidthMax) {
+                    width = imgWidthMax;
+                }
 
                 that.setState({
+                    img_width: width,
                     img_height: height,
                     imgBeforeLoaded: true,
                 }, () => that.initStyles());
 
                 beforeImageLoaded();
-
-            }
-            else if (img) {
+            } else if (img) {
                 that.imgGetSizeBeforeLoad();
             }
-
-        }, 0)
+        }, 0);
     },
 
     createNewFrame(e){
@@ -416,16 +426,17 @@ const Cropper = React.createClass({
     },
 
     crop(){
-        const {frameWidth, frameHeight, originX, originY, img_width} = this.state;
+        const {frameWidth, frameHeight, originX, originY, img_width, img_height} = this.state;
         let canvas = document.createElement('canvas');
         let img = ReactDOM.findDOMNode(this.refs.img);
-        const _rate = img.naturalWidth / img_width;
-        const realWidth = frameWidth * _rate;
-        const realHeight = frameHeight * _rate;
+        const _rateWidth = img.naturalWidth / img_width;
+        const _rateHeight = img.naturalHeight / img_height;
+        const realWidth = frameWidth * _rateWidth;
+        const realHeight = frameHeight * _rateHeight;
         canvas.width = realWidth;
         canvas.height = realHeight;
 
-        canvas.getContext("2d").drawImage(img, originX * _rate, originY * _rate, realWidth, realHeight, 0, 0, realWidth, realHeight);
+        canvas.getContext("2d").drawImage(img, originX * _rateWidth, originY * _rateHeight, realWidth, realHeight, 0, 0, realWidth, realHeight);
         return canvas.toDataURL();
     },
 
@@ -445,8 +456,8 @@ const Cropper = React.createClass({
             const _rateHeight = img.naturalHeight / img_height;
             const realWidth = parseInt(thisFrameWidth * _rateWidth);
             const realHeight = parseInt(thisFrameHeight * _rateHeight);
-            const realX = parseInt(thisOriginX * _rateHeight);
-            const realY = parseInt(thisOriginY * _rateWidth);
+            const realX = parseInt(thisOriginX * _rateWidth);
+            const realY = parseInt(thisOriginY * _rateHeight);
             _return = {width: realWidth, height: realHeight, x: realX, y: realY};
         } else {
             _return = {width: thisFrameWidth, height: thisFrameHeight, x: thisOriginX, y: thisOriginY};
