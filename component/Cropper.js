@@ -43,7 +43,7 @@ const Cropper = React.createClass({
             img_width: '100%',
             img_height: 'auto',
             imgWidth: 200,
-            imgheight: 200,
+            imgHeight: 200,
             imgTop: 0,
             imgLeft: 0,
             originX,
