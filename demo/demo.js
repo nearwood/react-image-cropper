@@ -91,9 +91,11 @@ const ImageCropDemo = React.createClass({
                 </li>
                 <li>
                     <h3>Variable width and height, cropper frame is relative to natural image size, don't allow new
-                        selection, set custom styles</h3>
+                        selection, set custom styles, set max image width and height</h3>
                     <div style={styles.image4}>
                         <Cropper src={src}
+                                 imgWidthMax={300}
+                                 imgHeightMax={200}
                                  width={320}
                                  height={240}
                                  originX={650}
@@ -141,8 +143,8 @@ const ImageCropDemo = React.createClass({
 
 const styles = {
     image4: {
-        width: 300,
-        height: 200
+        maxWidth: 300,
+        maxHeight: 200
     }
 };
 
