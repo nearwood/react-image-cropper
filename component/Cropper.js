@@ -10,6 +10,8 @@ const Cropper = React.createClass({
         rate: React.PropTypes.number,
         width: React.PropTypes.number,
         height: React.PropTypes.number,
+        imgWidthMax: React.PropTypes.number,
+        imgHeightMax: React.PropTypes.number,
         selectionNatural: React.PropTypes.bool,
         fixedRatio: React.PropTypes.bool,
         allowNewSelection: React.PropTypes.bool,
@@ -227,11 +229,11 @@ const Cropper = React.createClass({
 
                 let {imgWidthMax, imgHeightMax} = that.props;
 
-                if (height > imgHeightMax) {
+                if (imgHeightMax && height > imgHeightMax) {
                     height = imgHeightMax;
                 }
 
-                if (width > imgWidthMax) {
+                if (imgWidthMax && width > imgWidthMax) {
                     width = imgWidthMax;
                 }
 
