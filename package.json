@@ -22,7 +22,7 @@
   ],
   "author": "jerryshew",
   "license": "MIT",
-  "homepage": "https://github.com/jerryshew",
+  "homepage": "https://github.com/nearwood",
   "dependencies": {
     "deep-extend": "^0.4.1",
     "react": "^15.0.2",
