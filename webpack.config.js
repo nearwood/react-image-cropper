@@ -1,10 +1,8 @@
 var path = require('path');
 var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 var publicPath = process.env.NODE_ENV === 'dev' ? '/dist/' : '';
 
 module.exports = {
-
     entry: "./demo/demo.js",
     output: {
         path: path.join(__dirname, 'dist'),
@@ -13,13 +11,9 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
-        // new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     sourceMap: false,
-        //     mangle: false
-        // })
     ],
+    devtool: 'source-map',
     module: {
         loaders: [
             { 
