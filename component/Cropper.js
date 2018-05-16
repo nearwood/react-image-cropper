@@ -10,8 +10,6 @@ const Cropper = React.createClass({
         rate: React.PropTypes.number,
         width: React.PropTypes.number,
         height: React.PropTypes.number,
-        imgWidthMax: React.PropTypes.number,
-        imgHeightMax: React.PropTypes.number,
         selectionNatural: React.PropTypes.bool,
         fixedRatio: React.PropTypes.bool,
         allowNewSelection: React.PropTypes.bool,
@@ -235,6 +233,7 @@ const Cropper = React.createClass({
         }, 0);
     },
 
+    //TODO Obsolete, remove
     createNewFrame(e){
         if (this.state.dragging) {
             const pageX = e.pageX ? e.pageX : e.targetTouches[0].pageX;
@@ -265,7 +264,7 @@ const Cropper = React.createClass({
             let {action} = this.state;
             if (!action) return this.createNewFrame(e);
             if (action == 'move') return this.frameMove(e);
-            this.frameDotMove(action, e)
+            this.frameDotMove(action, e);
         }
     },
 
@@ -275,7 +274,10 @@ const Cropper = React.createClass({
         const pageY = e.pageY ? e.pageY : e.targetTouches[0].pageY;
         let _x = pageX - dragStartX + originX;
         let _y = pageY - dragStartY + originY;
-        if (pageX < 0 || pageY < 0) return false;
+
+        if (pageX < 0 || pageY < 0) {
+            return false;
+        }
 
         if ((pageX - dragStartX) > 0 || (pageY - dragStartY)) {
             this.setState({moved: true});
@@ -369,8 +371,8 @@ const Cropper = React.createClass({
     frameDotMove(dir, e){
         const pageX = e.pageX ? e.pageX : e.targetTouches[0].pageX;
         const pageY = e.pageY ? e.pageY : e.targetTouches[0].pageY;
-        const {dragStartX, dragStartY, originX, originY, frameWidth, frameHeight, fixedRatio, scale} = this.state;
-        //let img = ReactDOM.findDOMNode(this.refs.img);
+        const {dragStartX, dragStartY, originX, originY, frameWidth, frameHeight, fixedRatio} = this.state;
+        const {rate} = this.props;
 
         if (pageY !== 0 && pageX !== 0) {
             const _x = pageX - dragStartX;
@@ -386,27 +388,27 @@ const Cropper = React.createClass({
             switch (dir) {
                 case 'ne':
                     new_height = frameHeight - _y;
-                    return this.calcPosition(new_width, fixedRatio ? (new_width / scale) : new_height, originX, fixedRatio ? (originY - _x / scale) : (originY + _y));
+                    return this.calcPosition(new_width, fixedRatio ? (new_width / rate) : new_height, originX, fixedRatio ? (originY - _x / rate) : (originY + _y));
                 case 'e':
-                    return this.calcPosition(new_width, fixedRatio ? (new_width / scale) : frameHeight, originX, fixedRatio ? (originY - _x / scale * 0.5) : originY);
+                    return this.calcPosition(new_width, fixedRatio ? (new_width / rate) : frameHeight, originX, fixedRatio ? (originY - _x / rate * 0.5) : originY);
                 case 'se':
-                    return this.calcPosition(new_width, fixedRatio ? (new_width / scale) : new_height, originX, originY);
+                    return this.calcPosition(new_width, fixedRatio ? (new_width / rate) : new_height, originX, originY);
                 case 'n':
                     new_height = frameHeight - _y;
-                    return this.calcPosition(fixedRatio ? (new_height * scale) : frameWidth, new_height, fixedRatio ? (originX + _y * scale * 0.5) : originX, originY + _y);
+                    return this.calcPosition(fixedRatio ? (new_height * rate) : frameWidth, new_height, fixedRatio ? (originX + _y * rate * 0.5) : originX, originY + _y);
                 case 'nw':
                     new_width = frameWidth - _x;
                     new_height = frameHeight - _y;
-                    return this.calcPosition(new_width, fixedRatio ? (new_width / scale) : new_height, originX + _x, fixedRatio ? (originY + _x / scale) : (originY + _y));
+                    return this.calcPosition(new_width, fixedRatio ? (new_width / rate) : new_height, originX + _x, fixedRatio ? (originY + _x / rate) : (originY + _y));
                 case 'w':
                     new_width = frameWidth - _x;
-                    return this.calcPosition(new_width, fixedRatio ? (new_width / scale) : frameHeight, originX + _x, fixedRatio ? (originY + _x / scale * 0.5) : originY);
+                    return this.calcPosition(new_width, fixedRatio ? (new_width / rate) : frameHeight, originX + _x, fixedRatio ? (originY + _x / rate * 0.5) : originY);
                 case 'sw':
                     new_width = frameWidth - _x;
-                    return this.calcPosition(new_width, fixedRatio ? (new_width / scale) : new_height, originX + _x, originY);
+                    return this.calcPosition(new_width, fixedRatio ? (new_width / rate) : new_height, originX + _x, originY);
                 case 's':
                     new_height = frameHeight + _y;
-                    return this.calcPosition(fixedRatio ? (new_height * scale) : frameWidth, new_height, fixedRatio ? (originX - _y * scale * 0.5) : originX, originY);
+                    return this.calcPosition(fixedRatio ? (new_height * rate) : frameWidth, new_height, fixedRatio ? (originX - _y * rate * 0.5) : originX, originY);
                 default:
                     return
             }
