@@ -13,7 +13,7 @@ module.exports = {
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.NoErrorsPlugin(),
     ],
-    //devtool: 'source-map',
+    devtool: 'source-map',
     module: {
         loaders: [
             { 

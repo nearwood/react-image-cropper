@@ -55,53 +55,21 @@ const ImageCropDemo = React.createClass({
         const src = "demo.jpg";
         return (
             <ul>
-                <li>
-                    <h3>Default image crop</h3>
-                    <Cropper src={src} ref="image" imageLoaded={() => this.OnImageLoaded('image')}/>
-                    <br/>
-                    {this.state.imageLoaded ? <button onClick={() => this.OnClick('image')}>crop</button> : null}
-                    <h4>after crop</h4>
-                    {this.state.image ? <img width="200" src={this.state.image} alt=""/> : null}
-                </li>
-                <li>
-                    <h3>With given origin X and Y</h3>
-                    <Cropper src={src} originX={100} originY={100} ref="image1"
-                             imageLoaded={() => this.OnImageLoaded('image1')}/>
-                    {this.state.image1Loaded ? <button onClick={() => this.OnClick('image1')}>crop</button> : null}
-                    <br/>
-                    <h4>after crop</h4>
-                    {this.state.image1 ? <img width="200" src={this.state.image1} alt=""/> : null}
-                </li>
-                <li>
-                    <h3>With given rate</h3>
-                    <Cropper src={src} rate={16 / 9} width={500} ref="image2"
-                             imageLoaded={() => this.OnImageLoaded('image2')}/>
-                    <br/>
-                    {this.state.image2Loaded ? <button onClick={() => this.OnClick('image2')}>crop</button> : null}
-                    <h4>after crop</h4>
-                    {this.state.image2 ? <img width="200" src={this.state.image2} alt=""/> : null}
-                </li>
-                <li>
-                    <h3>Disabled</h3>
-                    <Cropper src={src} ref="image3" disabled={true}/>
-                </li>
-                <li>
-                    <h3>Missing source</h3>
-                    <Cropper src={'404.jpg'} ref="image5" imageLoadError={this.OnImageLoadError}/>
-                </li>
+
                 <li>
                     <h3>Variable width and height, cropper frame is relative to natural image size, don't allow new
                         selection, set custom styles, set max image width and height</h3>
                     <div style={styles.image4}>
-                        <Cropper src={src}
-                                 imgWidthMax={300}
-                                 imgHeightMax={100}
-                                 width={200}
-                                 height={400}
-                                 originX={650}
-                                 originY={386}
+                        <Cropper src={"tallimage.jpg"}
+                                 imgWidthMax={400}
+                                 imgHeightMax={200}
+                                 width={119}
+                                 height={556}
+                                 originX={52}
+                                 originY={6}
                                  fixedRatio={true}
-                                 rate={50 / 100}
+                                 rate={275 / 137}
+                                 onDragStop={() => this.OnClick('image4')}
                                  selectionNatural={true}
                                  allowNewSelection={false}
                                  styles={{
@@ -144,8 +112,7 @@ const ImageCropDemo = React.createClass({
 
 const styles = {
     image4: {
-        maxWidth: 300,
-        maxHeight: 100
+
     }
 };
 
