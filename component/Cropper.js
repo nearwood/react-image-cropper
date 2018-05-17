@@ -9,6 +9,8 @@ const Cropper = React.createClass({
         originY: React.PropTypes.number,
         rate: React.PropTypes.number,
         width: React.PropTypes.number,
+        imageWidth: React.PropTypes.number,
+        imageHeight: React.PropTypes.number,
         height: React.PropTypes.number,
         selectionNatural: React.PropTypes.bool,
         fixedRatio: React.PropTypes.bool,
@@ -22,6 +24,8 @@ const Cropper = React.createClass({
     },
     getDefaultProps() {
         return {
+            imageWidth: 320,
+            imageHeight: 240,
             width: 0,
             height: 0,
             selectionNatural: false,
@@ -38,11 +42,11 @@ const Cropper = React.createClass({
         };
     },
     getInitialState() {
-        let {originX, originY, width, height, selectionNatural, fixedRatio, allowNewSelection, rate, styles, imageLoaded, beforeImageLoaded, imageLoadError, onDragStop} = this.props;
+        let {originX, originY, width, height, imageWidth, imageHeight, selectionNatural, fixedRatio, allowNewSelection, rate, styles, imageLoaded, beforeImageLoaded, imageLoadError, onDragStop} = this.props;
         return {
             scale: 1.0,
-            imageWidth: 400,
-            imageHeight: 400,
+            imageWidth: imageWidth,
+            imageHeight: imageHeight,
             cropWidth: 0,
             cropHeight: 0,
             cropTop: 0,
