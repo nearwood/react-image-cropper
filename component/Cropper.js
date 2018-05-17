@@ -61,7 +61,6 @@ const Cropper = React.createClass({
             maxTop: 0,
             action: null,
             imgLoaded: false,
-            imgBeforeLoaded: false,
             styles: deepExtend({}, defaultStyles, styles),
             imageLoaded,
             beforeImageLoaded,
@@ -75,12 +74,12 @@ const Cropper = React.createClass({
         };
     },
 
-    initStyles() {
+    initStyles(skipScaling = false) {
         let {originX, originY} = this.props;
         const {scale, imageWidth, imageHeight, selectionNatural} = this.state;
         let {frameWidth, frameHeight} = this.state;
 
-        if (selectionNatural) {
+        if (selectionNatural && !skipScaling) {
             const realWidth = parseInt(frameWidth / scale);
             const realHeight = parseInt(frameHeight / scale);
             const realX = parseInt(originX / scale);
@@ -108,21 +107,6 @@ const Cropper = React.createClass({
 
         this.setState({maxLeft, maxTop});
         this.calcPosition(frameWidth, frameHeight, originX, originY);
-    },
-
-    updateFrame(newWidth, newHeight, newOriginX, newOriginY) {
-        this.setState({
-            frameWidth: newWidth,
-            frameHeight: newHeight,
-            originX: newOriginX,
-            originY: newOriginY,
-            originalFrameWidth: newWidth,
-            originalFrameHeight: newHeight,
-            originalOriginX: newOriginX,
-            originalOriginY: newOriginY
-        }, () => {
-            this.initStyles();
-        });
     },
 
     calcPosition(width, height, left, top, move){
@@ -203,7 +187,7 @@ const Cropper = React.createClass({
         imageLoadError({error: "Error loading image"});
     },
 
-    imgGetSizeBeforeLoad(){
+    imgGetSizeBeforeLoad() {
         var that = this;
         setTimeout(function () {
             let img = ReactDOM.findDOMNode(that.refs.img);
@@ -221,9 +205,8 @@ const Cropper = React.createClass({
                 that.setState({
                     scale: scale,
                     imageWidth: width,
-                    imageHeight: height,
-                    imgBeforeLoaded: true,
-                }, () => that.initStyles());
+                    imageHeight: height
+                }, () => that.initStyles(/* skipScaling */ true));
 
                 beforeImageLoaded();
             } else if (img) {
@@ -356,15 +339,25 @@ const Cropper = React.createClass({
         document.removeEventListener('touchend', this.handleDragStop);
     },
 
-    componentWillReceiveProps(newProps)
-    {
+    componentWillReceiveProps(newProps) {
         var width = this.props.width !== newProps.width;
         var height = this.props.height !== newProps.height;
         var originX = this.props.originX !== newProps.originX;
         var originY = this.props.originY !== newProps.originY;
 
         if (width || height || originX || originY) {
-            this.updateFrame(newProps.width, newProps.height, newProps.originX, newProps.originY);
+            this.setState({
+                frameWidth: newProps.width,
+                frameHeight: newProps.height,
+                originX: newProps.originX,
+                originY: newProps.originY,
+                originalFrameWidth: newProps.width,
+                originalFrameHeight: newProps.height,
+                originalOriginX: newProps.originX,
+                originalOriginY: newProps.originY
+            }, () => {
+                this.initStyles();
+            });
         }
     },
 
@@ -410,7 +403,7 @@ const Cropper = React.createClass({
                     new_height = frameHeight + _y;
                     return this.calcPosition(fixedRatio ? (new_height * rate) : frameWidth, new_height, fixedRatio ? (originX - _y * rate * 0.5) : originX, originY);
                 default:
-                    return
+                    return;
             }
         }
     },
@@ -451,7 +444,7 @@ const Cropper = React.createClass({
     },
 
     render() {
-        const {dragging, imageHeight, imageWidth, imgBeforeLoaded} = this.state;
+        const {dragging, imageHeight, imageWidth, imgLoaded} = this.state;
         const {src, disabled} = this.props;
 
         const imageNode = <div style={this.state.styles.source} ref="sourceNode">
@@ -474,7 +467,7 @@ const Cropper = React.createClass({
                  onTouchStart={disabled ? undefined : this.handleDragStart}
                  style={deepExtend({}, this.state.styles.container, {position: 'relative', height: imageHeight})}>
             {imageNode}
-            {imgBeforeLoaded ?
+            {imgLoaded ?
                 <div>
                     <div style={this.state.styles.modal}/>
                     <div style={

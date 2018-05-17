@@ -60,7 +60,7 @@ const ImageCropDemo = React.createClass({
                     <h3>Variable width and height, cropper frame is relative to natural image size, don't allow new
                         selection, set custom styles, set max image width and height</h3>
                     <div style={styles.image4}>
-                        <Cropper src={"tallimage.jpg"}
+                        <Cropper src={"small.png"}
                                  imgWidthMax={400}
                                  imgHeightMax={200}
                                  width={119}
