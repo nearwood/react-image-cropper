@@ -84,14 +84,12 @@ const Cropper = React.createClass({
 
         if (originX + frameWidth >= imageWidth) {
             originX = imageWidth - frameWidth;
-            this.setState({originX});
         }
         if (originY + frameHeight >= imageHeight) {
             originY = imageHeight - frameHeight;
-            this.setState({originY});
         }
 
-        this.setState({maxLeft, maxTop});
+        this.setState({maxLeft, maxTop, originX, originY});
         this.calcPosition(frameWidth, frameHeight, originX, originY);
     },
 
@@ -99,7 +97,10 @@ const Cropper = React.createClass({
         const {imageWidth, imageHeight, fixedRatio} = this.state;
         const {rate} = this.props;
 
-        if (width < 0 || height < 0) return false;
+        if (width < 0 || height < 0) {
+            return false;
+        }
+
         if (fixedRatio) {
             if (width / imageWidth > height / imageHeight) {
                 if (width > imageWidth) {
@@ -441,7 +442,6 @@ const Cropper = React.createClass({
                 ref='img'
                 onLoad={this.imgOnLoad}
                 onError={this.imgOnError}
-                width={imageWidth} height={imageHeight}
             />
         </div>;
 
@@ -451,7 +451,7 @@ const Cropper = React.createClass({
             <div ref="container"
                  onMouseDown={disabled ? undefined : this.handleDragStart}
                  onTouchStart={disabled ? undefined : this.handleDragStart}
-                 style={deepExtend({}, this.state.styles.container, {position: 'relative', height: imageHeight, width: imageWidth})}>
+                 style={deepExtend({}, this.state.styles.container, {position: 'relative', height: imageHeight})}>
             {imageNode}
             {imgLoaded ?
                 <div>

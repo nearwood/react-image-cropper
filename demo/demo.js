@@ -61,12 +61,6 @@ const ImageCropDemo = React.createClass({
                         selection, set custom styles, set max image width and height</h3>
                     <div style={styles.image4}>
                         <Cropper src={"small.png"}
-                                 imgWidthMax={400}
-                                 imgHeightMax={200}
-                                 width={119}
-                                 height={556}
-                                 originX={52}
-                                 originY={6}
                                  fixedRatio={true}
                                  rate={275 / 137}
                                  onDragStop={() => this.OnClick('image4')}
