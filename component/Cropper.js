@@ -41,8 +41,8 @@ const Cropper = React.createClass({
         let {originX, originY, width, height, selectionNatural, fixedRatio, allowNewSelection, rate, styles, imageLoaded, beforeImageLoaded, imageLoadError, onDragStop} = this.props;
         return {
             scale: 1.0,
-            imageWidth: 200,
-            imageHeight: 200,
+            imageWidth: 400,
+            imageHeight: 400,
             cropWidth: 200,
             cropHeight: 200,
             cropTop: 0,
@@ -451,7 +451,7 @@ const Cropper = React.createClass({
             <div ref="container"
                  onMouseDown={disabled ? undefined : this.handleDragStart}
                  onTouchStart={disabled ? undefined : this.handleDragStart}
-                 style={deepExtend({}, this.state.styles.container, {position: 'relative', height: imageHeight})}>
+                 style={deepExtend({}, this.state.styles.container, {position: 'relative', height: imageHeight, width: imageWidth})}>
             {imageNode}
             {imgLoaded ?
                 <div>

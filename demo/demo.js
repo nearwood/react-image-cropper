@@ -106,7 +106,8 @@ const ImageCropDemo = React.createClass({
 
 const styles = {
     image4: {
-
+        width: '100%',
+        height: 300
     }
 };
 
