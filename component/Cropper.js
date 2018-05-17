@@ -76,7 +76,7 @@ const Cropper = React.createClass({
 
     initStyles() {
         let {originX, originY, rate} = this.props;
-        const {imageWidth, imageHeight, fixedRatio} = this.state;
+        const {imageWidth, imageHeight, fixedRatio, scale} = this.state;
         let {frameWidth, frameHeight} = this.state;
 
         if (frameWidth === 0 || frameHeight === 0) {
@@ -84,6 +84,11 @@ const Cropper = React.createClass({
             frameHeight = fixedRatio ? frameWidth / rate : Math.floor(imageHeight * 0.85);
             originX = Math.floor(frameWidth * 0.15);
             originY = Math.floor(frameHeight * 0.15);
+        } else {
+            frameWidth *= scale;
+            frameHeight *= scale;
+            originX *= scale;
+            originY *= scale;
         }
 
         const maxLeft = imageWidth - frameWidth;
