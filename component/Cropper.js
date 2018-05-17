@@ -22,8 +22,8 @@ const Cropper = React.createClass({
     },
     getDefaultProps() {
         return {
-            width: 200,
-            height: 200,
+            width: 0,
+            height: 0,
             selectionNatural: false,
             fixedRatio: true,
             allowNewSelection: true,
@@ -43,8 +43,8 @@ const Cropper = React.createClass({
             scale: 1.0,
             imageWidth: 400,
             imageHeight: 400,
-            cropWidth: 200,
-            cropHeight: 200,
+            cropWidth: 0,
+            cropHeight: 0,
             cropTop: 0,
             cropLeft: 0,
             originX,
@@ -75,9 +75,16 @@ const Cropper = React.createClass({
     },
 
     initStyles() {
-        let {originX, originY} = this.props;
-        const {imageWidth, imageHeight} = this.state;
+        let {originX, originY, rate} = this.props;
+        const {imageWidth, imageHeight, fixedRatio} = this.state;
         let {frameWidth, frameHeight} = this.state;
+
+        if (frameWidth === 0 || frameHeight === 0) {
+            frameWidth = Math.floor(imageWidth * 0.85);
+            frameHeight = fixedRatio ? frameWidth / rate : Math.floor(imageHeight * 0.85);
+            originX = Math.floor(frameWidth * 0.15);
+            originY = Math.floor(frameHeight * 0.15);
+        }
 
         const maxLeft = imageWidth - frameWidth;
         const maxTop = imageHeight - frameHeight;
@@ -89,8 +96,9 @@ const Cropper = React.createClass({
             originY = imageHeight - frameHeight;
         }
 
-        this.setState({maxLeft, maxTop, originX, originY});
-        this.calcPosition(frameWidth, frameHeight, originX, originY);
+        this.setState({frameWidth, frameHeight, maxLeft, maxTop, originX, originY}, () => {
+            this.calcPosition(frameWidth, frameHeight, originX, originY);
+        });
     },
 
     calcPosition(width, height, left, top, move){
