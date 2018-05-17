@@ -341,15 +341,18 @@ const Cropper = React.createClass({
         var originY = this.props.originY !== newProps.originY;
 
         if (width || height || originX || originY) {
+
+            let {scale} = this.state;
+
             this.setState({
-                frameWidth: newProps.width,
-                frameHeight: newProps.height,
-                originX: newProps.originX,
-                originY: newProps.originY,
-                originalFrameWidth: newProps.width,
-                originalFrameHeight: newProps.height,
-                originalOriginX: newProps.originX,
-                originalOriginY: newProps.originY
+                frameWidth: newProps.width * scale,
+                frameHeight: newProps.height * scale,
+                originX: newProps.originX * scale,
+                originY: newProps.originY * scale,
+                originalFrameWidth: newProps.width * scale,
+                originalFrameHeight: newProps.height * scale,
+                originalOriginX: newProps.originX * scale,
+                originalOriginY: newProps.originY * scale
             }, () => {
                 this.initStyles();
             });
