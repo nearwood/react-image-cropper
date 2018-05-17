@@ -78,7 +78,7 @@ const Cropper = React.createClass({
         };
     },
 
-    initStyles() {
+    initStyles(skipScaling) {
         let {originX, originY, rate} = this.props;
         const {imageWidth, imageHeight, fixedRatio, scale} = this.state;
         let {frameWidth, frameHeight} = this.state;
@@ -88,7 +88,7 @@ const Cropper = React.createClass({
             frameHeight = fixedRatio ? frameWidth / rate : Math.floor(imageHeight * 0.85);
             originX = Math.floor(frameWidth * 0.15);
             originY = Math.floor(frameHeight * 0.15);
-        } else {
+        } else if (!skipScaling) {
             frameWidth *= scale;
             frameHeight *= scale;
             originX *= scale;
@@ -363,7 +363,7 @@ const Cropper = React.createClass({
                 originalOriginX: newProps.originX * scale,
                 originalOriginY: newProps.originY * scale
             }, () => {
-                this.initStyles();
+                this.initStyles(true);
             });
         }
     },
