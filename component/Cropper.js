@@ -74,24 +74,10 @@ const Cropper = React.createClass({
         };
     },
 
-    initStyles(skipScaling = false) {
+    initStyles() {
         let {originX, originY} = this.props;
-        const {scale, imageWidth, imageHeight, selectionNatural} = this.state;
+        const {imageWidth, imageHeight} = this.state;
         let {frameWidth, frameHeight} = this.state;
-
-        if (selectionNatural && !skipScaling) {
-            const realWidth = parseInt(frameWidth / scale);
-            const realHeight = parseInt(frameHeight / scale);
-            const realX = parseInt(originX / scale);
-            const realY = parseInt(originY / scale);
-
-            frameWidth = realWidth;
-            frameHeight = realHeight;
-            originX = realX;
-            originY = realY;
-
-            this.setState({frameWidth: frameWidth, frameHeight: frameHeight, originX: originX, originY: originY});
-        }
 
         const maxLeft = imageWidth - frameWidth;
         const maxTop = imageHeight - frameHeight;
@@ -206,7 +192,7 @@ const Cropper = React.createClass({
                     scale: scale,
                     imageWidth: width,
                     imageHeight: height
-                }, () => that.initStyles(/* skipScaling */ true));
+                }, () => that.initStyles());
 
                 beforeImageLoaded();
             } else if (img) {
