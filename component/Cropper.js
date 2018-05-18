@@ -214,6 +214,7 @@ const Cropper = React.createClass({
 
                 beforeImageLoaded();
             } else if (img) {
+                console.log("waiting");
                 that.imgGetSizeBeforeLoad();
             }
         }, 0);
