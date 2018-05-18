@@ -1,7 +1,5 @@
 ## React Image Cropper
 
-Based off of: https://github.com/jerryshew/react-image-cropper
-
 [![Downloads](https://img.shields.io/npm/dt/react-image-cropper.svg)](https://www.npmjs.com/package/react-image-cropper)
 [![Version](https://img.shields.io/npm/v/react-image-cropper.svg)](https://www.npmjs.com/package/react-image-cropper)
 
@@ -36,7 +34,7 @@ Custom:
 
 `var values = this.refs.cropper.values()`
 
-+ TODO UPDATE THIS SECTION
++ custom use
 
 | prop  |  value   |
 |:-------:|:--------|
