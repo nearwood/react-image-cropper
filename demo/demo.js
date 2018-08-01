@@ -28,9 +28,22 @@ const ImageCropDemo = React.createClass({
     },
 
     OnBeforeImageLoaded(state){
-        this.setState({
+        let img = this.refs && this.refs[state] && this.refs[state].refs && this.refs[state].refs.img;
+        let newState = {
             [state + 'BeforeLoaded']: true
-        });
+        };
+
+        if(img && imgSize.default_width && imgSize.default_height && img.naturalWidth && img.naturalHeight) {
+            let img_width = imgSize.default_width;
+            let img_height = imgSize.default_height;
+            let naturalWidth = img.naturalWidth;
+            let naturalHeight = img.naturalHeight;
+            img_width = naturalWidth < naturalHeight ? (img_width * naturalWidth / naturalHeight) : img_width;
+            img_height = naturalHeight > naturalWidth ? img_height: (img_height * naturalWidth / naturalHeight);
+            imgSize.img_width = img_width;
+            imgSize.img_height = img_height;
+        }
+        this.setState(newState);
     },
 
     OnImageLoadError(e) {
@@ -50,9 +63,9 @@ const ImageCropDemo = React.createClass({
             [state + 'Values']: node.values()
         });
     },
-
     render() {
         const src = "demo.jpg";
+        const srcTall = 'tallimage.jpg';
         return (
             <ul>
                 <li>
@@ -92,34 +105,17 @@ const ImageCropDemo = React.createClass({
                 <li>
                     <h3>Variable width and height, cropper frame is relative to natural image size, don't allow new
                         selection, set custom styles</h3>
-                    <div style={styles.image4}>
-                        <Cropper src={src}
+                    <div style={styles.image4Wrapper}>
+                        <Cropper src={srcTall}
                                  width={320}
                                  height={240}
+                                 imgSize={imgSize}
                                  originX={650}
                                  originY={386}
                                  fixedRatio={false}
                                  selectionNatural={true}
                                  allowNewSelection={false}
-                                 styles={{
-                                     source_img: {
-                                         WebkitFilter: 'blur(3.5px)',
-                                         filter: 'blur(3.5px)'
-                                     },
-                                     modal: {
-                                         opacity: 0.5,
-                                         backgroundColor: '#fff'
-                                     },
-                                     dotInner: {
-                                         borderColor: '#ff0000'
-                                     },
-                                     dotInnerCenterVertical: {
-                                         backgroundColor: '#ff0000'
-                                     },
-                                     dotInnerCenterHorizontal: {
-                                         backgroundColor: '#ff0000'
-                                     }
-                                 }}
+                                 styles={styles.cropper}
                                  ref="image4"
                                  imageLoaded={() => this.OnImageLoaded('image4')}
                                  beforeImageLoaded={() => this.OnBeforeImageLoaded('image4')}
@@ -140,10 +136,33 @@ const ImageCropDemo = React.createClass({
 });
 
 const styles = {
-    image4: {
-        width: 300,
-        height: 200
+    image4Wrapper: {
+        position: 'relative',
+        width: 309,
+        height: 309
+    },
+    cropper: {
+        source_img: {
+            WebkitFilter: 'blur(3.5px)',
+            filter: 'blur(3.5px)'
+        },
+        modal: {
+            opacity: 0.5,
+            backgroundColor: '#fff'
+        },
+        dotInner: {
+            borderColor: '#ff0000'
+        },
+        dotInnerCenterVertical: {
+            backgroundColor: '#ff0000'
+        },
+        dotInnerCenterHorizontal: {
+            backgroundColor: '#ff0000'
+        }
     }
 };
-
+const imgSize = {
+    default_width: 309,
+    default_height: 309
+}
 ReactDOM.render(<ImageCropDemo/>, document.getElementById('root'))

@@ -10,6 +10,7 @@ const Cropper = React.createClass({
         rate: React.PropTypes.number,
         width: React.PropTypes.number,
         height: React.PropTypes.number,
+        imgSize: React.PropTypes.object,
         selectionNatural: React.PropTypes.bool,
         fixedRatio: React.PropTypes.bool,
         allowNewSelection: React.PropTypes.bool,
@@ -76,14 +77,23 @@ const Cropper = React.createClass({
 
     initStyles(){
         const container = ReactDOM.findDOMNode(this.refs.container);
+        let newState = {img_width: container.offsetWidth}
+        if(this.props.imgSize && this.props.imgSize.img_width && this.props.imgSize.img_height) {
+            newState.img_width = this.props.imgSize.img_width;
+            newState.img_height = this.props.imgSize.img_height;
+        }
         this.setState({
-            img_width: container.offsetWidth
+            img_width: newState.img_width,
+            img_height: newState.img_height ? newState.img_height : this.state.img_height
         }, () => {
             // calc frame width height
-            let {originX, originY} = this.props;
-            const {img_width, img_height, selectionNatural} = this.state;
-            let {frameWidth, frameHeight} = this.state;
+            let {originX, originY, imgSize} = this.props;
+            const {selectionNatural} = this.state;
+            let img_width = imgSize && imgSize.img_width ? imgSize.img_width : this.state.img_width;
+            let img_height = imgSize && imgSize.img_height ? imgSize.img_height : this.state.img_height;
 
+            let frameWidth = this.state.frameWidth ? this.state.frameWidth : img_width;
+            let frameHeight = this.state.frameHeight ? this.state.frameHeight : img_height/4;
             if (selectionNatural) {
                 let img = ReactDOM.findDOMNode(this.refs.img);
                 const _rateWidth = img_width / img.naturalWidth;
@@ -112,8 +122,10 @@ const Cropper = React.createClass({
                 originY = img_height - frameHeight;
                 this.setState({originY});
             }
-
-            this.setState({maxLeft, maxTop});
+            if(this.state.img_width !== img_width || this.state.img_height != img_height) {
+                this.setState({img_width: img_width, img_height: img_height});
+            }
+            this.setState({maxLeft, maxTop, img_height});
             // calc clone position
             this.calcPosition(frameWidth, frameHeight, originX, originY);
         });
@@ -366,9 +378,13 @@ const Cropper = React.createClass({
 
         if (width || height || originX || originY) {
             this.updateFrame(newProps.width, newProps.height, newProps.originX, newProps.originY);
+        } else if(typeof newProps.imgSize !== 'undefined' &&
+            typeof newProps.imgSize.img_width !== 'undefined'&&
+            typeof newProps.imgSize.img_height !== 'undefined' &&
+            (this.state.img_width !== newProps.imgSize.img_width || this.state.img_height !== newProps.imgSize.img_height)) {
+            this.initStyles();
         }
     },
-
     frameDotMove(dir, e){
         const pageX = e.pageX ? e.pageX : e.targetTouches[0].pageX;
         const pageY = e.pageY ? e.pageY : e.targetTouches[0].pageY;
