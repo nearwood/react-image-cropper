@@ -4,6 +4,7 @@ import Css from './demo.less';
 import Cropper from '../component/Cropper';
 
 const ImageCropDemo = React.createClass({
+
     getInitialState() {
         return {
             image: '',
@@ -17,7 +18,11 @@ const ImageCropDemo = React.createClass({
             image4: '',
             image4Loaded: false,
             image4BeforeLoaded: false,
-            image4Values: ''
+            image4Values: '',
+            imgSize: {
+                default_width: 309,
+                default_height: 309
+            }
         };
     },
 
@@ -28,21 +33,9 @@ const ImageCropDemo = React.createClass({
     },
 
     OnBeforeImageLoaded(state){
-        let img = this.refs && this.refs[state] && this.refs[state].refs && this.refs[state].refs.img;
         let newState = {
             [state + 'BeforeLoaded']: true
         };
-
-        if(img && imgSize.default_width && imgSize.default_height && img.naturalWidth && img.naturalHeight) {
-            let img_width = imgSize.default_width;
-            let img_height = imgSize.default_height;
-            let naturalWidth = img.naturalWidth;
-            let naturalHeight = img.naturalHeight;
-            img_width = naturalWidth < naturalHeight ? (img_width * naturalWidth / naturalHeight) : img_width;
-            img_height = naturalHeight > naturalWidth ? img_height: (img_height * naturalWidth / naturalHeight);
-            imgSize.img_width = img_width;
-            imgSize.img_height = img_height;
-        }
         this.setState(newState);
     },
 
@@ -109,7 +102,7 @@ const ImageCropDemo = React.createClass({
                         <Cropper src={srcTall}
                                  width={320}
                                  height={240}
-                                 imgSize={imgSize}
+                                 imgSize={this.state.imgSize}
                                  originX={650}
                                  originY={386}
                                  fixedRatio={false}
@@ -137,9 +130,6 @@ const ImageCropDemo = React.createClass({
 
 const styles = {
     image4Wrapper: {
-        position: 'relative',
-        width: 309,
-        height: 309
     },
     cropper: {
         source_img: {
@@ -161,8 +151,5 @@ const styles = {
         }
     }
 };
-const imgSize = {
-    default_width: 309,
-    default_height: 309
-}
+
 ReactDOM.render(<ImageCropDemo/>, document.getElementById('root'))
