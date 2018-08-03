@@ -369,11 +369,6 @@ const Cropper = React.createClass({
 
         if (width || height || originX || originY) {
             this.updateFrame(newProps.width, newProps.height, newProps.originX, newProps.originY);
-        } else if(typeof newProps.imgSize !== 'undefined' &&
-            typeof newProps.imgSize.img_width !== 'undefined'&&
-            typeof newProps.imgSize.img_height !== 'undefined' &&
-            (this.state.img_width !== newProps.imgSize.img_width || this.state.img_height !== newProps.imgSize.img_height)) {
-            this.initStyles();
         }
     },
     frameDotMove(dir, e){
