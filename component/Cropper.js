@@ -221,8 +221,8 @@ const Cropper = React.createClass({
 
                 let imgSize = that.props.imgSize;
                 if(imgSize && imgSize.default_width && imgSize.default_height) {
-                    img_width = img.naturalWidth < img.naturalHeight ? (imgSize.default_width * img.naturalWidth / img.naturalHeight) : imgSize.default_width;
-                    img_height = img.naturalHeight > img.naturalWidth ? imgSize.default_height: (imgSize.default_height * img.naturalWidth / img.naturalHeight);
+                    img_width = img.naturalWidth > img.naturalHeight ? imgSize.default_width : (imgSize.default_width * img.naturalWidth / img.naturalHeight);
+                    img_height = img.naturalHeight > img.naturalWidth ? imgSize.default_height: (imgSize.default_height * img.naturalHeight / img.naturalWidth);
                 }
 
                 that.setState({
