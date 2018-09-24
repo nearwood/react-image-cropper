@@ -1,46 +1,12 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-const deepExtend = require('deep-extend');
+import React, { Component } from 'react';
+import deepExtend from 'deep-extend';
+import PropTypes from 'prop-types';
 
-const Cropper = React.createClass({
-    PropTypes: {
-        src: React.PropTypes.string.isRequired,
-        originX: React.PropTypes.number,
-        originY: React.PropTypes.number,
-        rate: React.PropTypes.number,
-        width: React.PropTypes.number,
-        height: React.PropTypes.number,
-        imgSize: React.PropTypes.object,
-        selectionNatural: React.PropTypes.bool,
-        fixedRatio: React.PropTypes.bool,
-        allowNewSelection: React.PropTypes.bool,
-        disabled: React.PropTypes.bool,
-        styles: React.PropTypes.object,
-        imageLoaded: React.PropTypes.function,
-        beforeImageLoaded: React.PropTypes.function,
-        imageLoadError: React.PropTypes.function,
-        onDragStop: React.PropTypes.function
-    },
-    getDefaultProps() {
-        return {
-            width: 200,
-            height: 200,
-            selectionNatural: false,
-            fixedRatio: true,
-            allowNewSelection: true,
-            rate: 1,
-            originX: 0,
-            originY: 0,
-            styles: {},
-            imageLoaded: function () {},
-            beforeImageLoaded: function () {},
-            imageLoadError: function () {},
-            onDragStop: function() {}
-        };
-    },
-    getInitialState() {
+class Cropper extends Component {
+    constructor(props) {
+        super(props);
         let {originX, originY, width, height, selectionNatural, fixedRatio, allowNewSelection, rate, styles, imageLoaded, beforeImageLoaded, imageLoadError, onDragStop} = this.props;
-        return {
+        this.state = {
             img_width: '100%',
             img_height: 'auto',
             imgWidth: 200,
@@ -72,14 +38,14 @@ const Cropper = React.createClass({
             originalOriginY: originY,
             originalFrameWidth: width,
             originalFrameHeight: fixedRatio ? width / rate : height,
-        };
-    },
+        }
+    }
     initStyles(){
         let {originX, originY} = this.props;
         const {selectionNatural, img_width, img_height,} = this.state;
 
-        let frameWidth = this.state.frameWidth ? this.state.frameWidth : img_width;
-        let frameHeight = this.state.frameHeight ? this.state.frameHeight : img_height/4;
+        let frameWidth = this.state.frameWidth || img_width;
+        let frameHeight = this.state.frameHeight || img_height/4;
         if (selectionNatural) {
             let img = ReactDOM.findDOMNode(this.refs.img);
             const _rateWidth = img_width / img.naturalWidth;
@@ -111,7 +77,7 @@ const Cropper = React.createClass({
         this.setState({maxLeft, maxTop, img_height});
         // calc clone position
         this.calcPosition(frameWidth, frameHeight, originX, originY);
-    },
+    }
     updateFrame(newWidth, newHeight, newOriginX, newOriginY)
     {
         this.setState({
@@ -126,7 +92,7 @@ const Cropper = React.createClass({
         }, () => {
             this.initStyles();
         });
-    },
+    }
 
     calcPosition(width, height, left, top, move){
         const {img_width, img_height, fixedRatio} = this.state;
@@ -192,19 +158,19 @@ const Cropper = React.createClass({
         }
 
         this.setState({imgLeft: left, imgTop: top, imgWidth: width, imgHeight: height});
-    },
+    }
 
     imgOnLoad(){
         const {imageLoaded} = this.state;
         this.setState({imgLoaded: true});
         imageLoaded();
-    },
+    }
 
     imgOnError(proxy, error) {
         const {imageLoadError} = this.state;
         this.setState({imgLoaded: false});
         imageLoadError({error: "Error loading image"});
-    },
+    }
 
     imgGetSizeBeforeLoad(){
         var that = this;
@@ -239,7 +205,7 @@ const Cropper = React.createClass({
             }
 
         }, 0)
-    },
+    }
 
     createNewFrame(e){
         if (this.state.dragging) {
@@ -263,7 +229,7 @@ const Cropper = React.createClass({
 
             return this.calcPosition(frameWidth - _x, fixedRatio ? ((frameWidth - _x) / rate) : (frameHeight - _y), offsetLeft + _x, fixedRatio ? (offsetTop + _x / rate) : (offsetTop + _y));
         }
-    },
+    }
 
     handleDrag(e){
         if (this.state.dragging) {
@@ -273,7 +239,7 @@ const Cropper = React.createClass({
             if (action == 'move') return this.frameMove(e);
             this.frameDotMove(action, e)
         }
-    },
+    }
 
     frameMove(e){
         const {originX, originY, startX, startY, frameWidth, frameHeight, maxLeft, maxTop} = this.state;
@@ -290,7 +256,7 @@ const Cropper = React.createClass({
         if (_x > maxLeft) _x = maxLeft;
         if (_y > maxTop) _y = maxTop;
         this.calcPosition(frameWidth, frameHeight, _x, _y, true);
-    },
+    }
 
     handleDragStart(e) {
         const {allowNewSelection} = this.state;
@@ -319,7 +285,7 @@ const Cropper = React.createClass({
                 this.calcPosition(2, 2, pageX - offsetLeft, pageY - offsetTop);
             });
         }
-    },
+    }
 
     handleDragStop(e){
         if (this.state.dragging) {
@@ -340,7 +306,7 @@ const Cropper = React.createClass({
                 onDragStop(this.values());
             });
         }
-    },
+    }
 
     componentDidMount(){
         document.addEventListener('mousemove', this.handleDrag);
@@ -350,7 +316,7 @@ const Cropper = React.createClass({
         document.addEventListener('touchend', this.handleDragStop);
 
         this.imgGetSizeBeforeLoad();
-    },
+    }
 
     componentWillUnmount(){
         document.removeEventListener('mousemove', this.handleDrag);
@@ -358,8 +324,7 @@ const Cropper = React.createClass({
 
         document.removeEventListener('mouseup', this.handleDragStop);
         document.removeEventListener('touchend', this.handleDragStop);
-    },
-
+    }
     componentWillReceiveProps(newProps)
     {
         var width = this.props.width !== newProps.width;
@@ -370,7 +335,7 @@ const Cropper = React.createClass({
         if (width || height || originX || originY) {
             this.updateFrame(newProps.width, newProps.height, newProps.originX, newProps.originY);
         }
-    },
+    }
     frameDotMove(dir, e){
         const pageX = e.pageX ? e.pageX : e.targetTouches[0].pageX;
         const pageY = e.pageY ? e.pageY : e.targetTouches[0].pageY;
@@ -415,7 +380,7 @@ const Cropper = React.createClass({
                     return
             }
         }
-    },
+    }
 
     crop(){
         const {frameWidth, frameHeight, originX, originY, img_width} = this.state;
@@ -429,7 +394,7 @@ const Cropper = React.createClass({
 
         canvas.getContext("2d").drawImage(img, originX * _rate, originY * _rate, realWidth, realHeight, 0, 0, realWidth, realHeight);
         return canvas.toDataURL();
-    },
+    }
 
     values(){
         const {frameWidth, frameHeight, originX, originY, img_width, img_height, selectionNatural, moved, originalOriginX, originalOriginY, originalFrameWidth, originalFrameHeight} = this.state;
@@ -455,7 +420,7 @@ const Cropper = React.createClass({
         }
 
         return _return;
-    },
+    }
 
     render() {
         const {dragging, img_height, img_width, imgBeforeLoaded} = this.state;
@@ -540,7 +505,40 @@ const Cropper = React.createClass({
             }
         </div>);
     }
-});
+}
+Cropper.prototype = {
+    src: PropTypes.string.isRequired,
+    originX: PropTypes.number,
+    originY: PropTypes.number,
+    rate: PropTypes.number,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    imgSize: PropTypes.object,
+    selectionNatural: PropTypes.bool,
+    fixedRatio: PropTypes.bool,
+    allowNewSelection: PropTypes.bool,
+    disabled: PropTypes.bool,
+    styles: PropTypes.object,
+    imageLoaded: PropTypes.func,
+    beforeImageLoaded: PropTypes.func,
+    imageLoadError: PropTypes.func,
+    onDragStop: PropTypes.func
+}
+Cropper.defaultProps = {
+    width: 200,
+    height: 200,
+    selectionNatural: false,
+    fixedRatio: true,
+    allowNewSelection: true,
+    rate: 1,
+    originX: 0,
+    originY: 0,
+    styles: {},
+    imageLoaded: function () {},
+    beforeImageLoaded: function () {},
+    imageLoadError: function () {},
+    onDragStop: function() {}
+}
 
 var defaultStyles = {
     container: {},
@@ -700,6 +698,7 @@ var defaultStyles = {
         marginLeft: -4,
         marginTop: -1
     },
+    fixedRatio: true,
     line: {
         position: 'absolute',
         display: 'block',
@@ -736,7 +735,6 @@ var defaultStyles = {
         width: 4,
         height: '100%',
         background: 'transparent'
-    }
+    },
 };
-
 module.exports = Cropper;
