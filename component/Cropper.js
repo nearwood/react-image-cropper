@@ -1,7 +1,7 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-const deepExtend = require('deep-extend');
-const PropTypes = require('prop-types');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import deepExtend from 'deep-extend';
+import PropTypes from 'prop-types';
 
 export default class Cropper extends React.Component {
     constructor(props) {
