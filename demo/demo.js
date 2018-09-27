@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Css from './demo.less';
 import Cropper from '../component/Cropper';
 
-const ImageCropDemo = React.createClass({
-
-    getInitialState() {
-        return {
+class ImageCropDemo extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             image: '',
             imageLoaded: false,
             image1: '',
@@ -23,39 +23,38 @@ const ImageCropDemo = React.createClass({
                 default_width: 309,
                 default_height: 309
             }
-        };
-    },
-
+        }
+    }
     OnImageLoaded(state){
         this.setState({
             [state + 'Loaded']: true
         });
-    },
+    }
 
     OnBeforeImageLoaded(state){
         let newState = {
             [state + 'BeforeLoaded']: true
         };
         this.setState(newState);
-    },
+    }
 
     OnImageLoadError(e) {
         console.error(e);
-    },
+    }
 
     OnClick(state){
         let node = this.refs[state];
         this.setState({
             [state]: node.crop()
         });
-    },
+    }
 
     OnClickValues(state){
         let node = this.refs[state];
         this.setState({
             [state + 'Values']: node.values()
         });
-    },
+    }
     render() {
         const src = "demo.jpg";
         const srcTall = 'tallimage.jpg';
@@ -126,8 +125,7 @@ const ImageCropDemo = React.createClass({
             </ul>
         );
     }
-});
-
+}
 const styles = {
     image4Wrapper: {
     },

@@ -26,8 +26,9 @@
   "homepage": "https://github.com/jerryshew",
   "dependencies": {
     "deep-extend": "^0.4.1",
-    "react": "^15.0.2",
-    "react-dom": "^15.0.2"
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
