@@ -7,7 +7,8 @@
     "start": "npm-run-parallel babel server",
     "server": "cross-env NODE_ENV=dev node server.js",
     "babel": "babel --presets es2015,react --watch component/ --out-dir lib/",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "copy-dist": "xcopy dist\\app.js C:\\dev\\ulcreate\\shared\\ui\\src\\node_modules\\react-image-cropper\\dist /E /Y"
   },
   "repository": {
     "type": "git",
