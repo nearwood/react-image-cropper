@@ -2,7 +2,4 @@
 
 import Cropper from './lib/Cropper';
 
-module.exports = {
-    Cropper: Cropper
-};
-
+export default Cropper;
